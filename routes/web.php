@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\ParticipantController;
@@ -31,26 +32,26 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | User Management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource('users', UserController::class);
+
+    /*
+    |--------------------------------------------------------------------------
     | Modules
     |--------------------------------------------------------------------------
     */
 
     Route::resource('courses', CourseController::class);
-
     Route::resource('trainers', TrainerController::class);
-
     Route::resource('participants', ParticipantController::class);
-
     Route::resource('classes', TrainingClassController::class);
-
     Route::resource('enrollments', EnrollmentController::class);
-
     Route::resource('attendances', AttendanceController::class);
-
     Route::resource('certificates', CertificateController::class);
-
     Route::resource('payments', PaymentController::class);
-
     Route::resource('notifications', NotificationController::class);
 
     /*
