@@ -9,14 +9,24 @@
     <div class="container py-4">
 
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show">
+
                 {{ session('success') }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+                </button>
+
             </div>
         @endif
 
         <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <h4>Training Class List</h4>
+            <h4 class="mb-0">
+                Training Class List
+            </h4>
 
             <a href="{{ route('classes.create') }}"
                class="btn btn-primary">
@@ -27,100 +37,148 @@
 
         </div>
 
-        <table class="table table-bordered table-hover">
+        <div class="card mb-3">
 
-            <thead class="table-dark">
+            <div class="card-body">
 
-                <tr>
+                <form method="GET"
+                      action="{{ route('classes.index') }}">
 
-                    <th>ID</th>
-                    <th>Class Code</th>
-                    <th>Course</th>
-                    <th>Trainer</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Venue</th>
-                    <th>Capacity</th>
-                    <th>Status</th>
-                    <th width="180">Action</th>
+                    <div class="row">
 
-                </tr>
+                        <div class="col-md-10">
 
-            </thead>
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ $search }}"
+                                class="form-control"
+                                placeholder="Search class code, course, trainer, venue or status">
 
-            <tbody>
+                        </div>
 
-            @forelse($classes as $class)
-
-                <tr>
-
-                    <td>{{ $class->id }}</td>
-
-                    <td>{{ $class->class_code }}</td>
-
-                    <td>{{ $class->course->course_name }}</td>
-
-                    <td>{{ $class->trainer->trainer_name }}</td>
-
-                    <td>{{ $class->start_date }}</td>
-
-                    <td>{{ $class->end_date }}</td>
-
-                    <td>{{ $class->venue }}</td>
-
-                    <td>{{ $class->max_participants }}</td>
-
-                    <td>{{ $class->status }}</td>
-
-                    <td>
-
-                        <a href="{{ route('classes.edit',$class) }}"
-                           class="btn btn-warning btn-sm">
-
-                            Edit
-
-                        </a>
-
-                        <form
-                            action="{{ route('classes.destroy',$class) }}"
-                            method="POST"
-                            style="display:inline">
-
-                            @csrf
-                            @method('DELETE')
+                        <div class="col-md-2 d-grid">
 
                             <button
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Delete this class?')">
+                                class="btn btn-dark">
 
-                                Delete
+                                Search
 
                             </button>
 
-                        </form>
+                        </div>
 
-                    </td>
+                    </div>
 
-                </tr>
+                </form>
 
-            @empty
+            </div>
 
-                <tr>
+        </div>
 
-                    <td colspan="10"
-                        class="text-center">
+        <div class="table-responsive">
 
-                        No training class available.
+            <table class="table table-bordered table-hover align-middle">
 
-                    </td>
+                <thead class="table-dark">
 
-                </tr>
+                    <tr>
 
-            @endforelse
+                        <th width="60">ID</th>
+                        <th>Class Code</th>
+                        <th>Course</th>
+                        <th>Trainer</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Venue</th>
+                        <th width="90">Capacity</th>
+                        <th width="100">Status</th>
+                        <th width="180" class="text-center">Action</th>
 
-            </tbody>
+                    </tr>
 
-        </table>
+                </thead>
+
+                <tbody>
+
+                @forelse($classes as $class)
+
+                    <tr>
+
+                        <td>{{ $class->id }}</td>
+
+                        <td>{{ $class->class_code }}</td>
+
+                        <td>{{ $class->course->course_name }}</td>
+
+                        <td>{{ $class->trainer->trainer_name }}</td>
+
+                        <td>{{ $class->start_date }}</td>
+
+                        <td>{{ $class->end_date }}</td>
+
+                        <td>{{ $class->venue }}</td>
+
+                        <td>{{ $class->max_participants }}</td>
+
+                        <td>{{ $class->status }}</td>
+
+                        <td class="text-center">
+
+                            <a href="{{ route('classes.edit', $class) }}"
+                               class="btn btn-warning btn-sm">
+
+                                Edit
+
+                            </a>
+
+                            <form
+                                action="{{ route('classes.destroy', $class) }}"
+                                method="POST"
+                                class="d-inline">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Delete this class?')">
+
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="10" class="text-center">
+
+                            No training class available.
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="mt-3">
+
+            {{ $classes->links() }}
+
+        </div>
 
     </div>
 

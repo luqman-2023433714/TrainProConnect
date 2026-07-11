@@ -12,23 +12,66 @@
             <div class="alert alert-success alert-dismissible fade show">
                 {{ session('success') }}
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"></button>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
 
             </div>
         @endif
 
         <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <h3 class="mb-0">Course List</h3>
+            <h3 class="mb-0">
+                Course List
+            </h3>
 
-            <a href="{{ route('courses.create') }}"
-               class="btn btn-primary">
+            <a
+                href="{{ route('courses.create') }}"
+                class="btn btn-primary">
 
                 + Add Course
 
             </a>
+
+        </div>
+
+        <div class="card mb-3">
+
+            <div class="card-body">
+
+                <form method="GET"
+                      action="{{ route('courses.index') }}">
+
+                    <div class="row">
+
+                        <div class="col-md-10">
+
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ $search }}"
+                                class="form-control"
+                                placeholder="Search by course code, course name or description">
+
+                        </div>
+
+                        <div class="col-md-2 d-grid">
+
+                            <button
+                                class="btn btn-dark">
+
+                                Search
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
 
@@ -72,16 +115,18 @@
 
                         <td class="text-center">
 
-                            <a href="{{ route('courses.edit',$course) }}"
-                               class="btn btn-warning btn-sm">
+                            <a
+                                href="{{ route('courses.edit',$course) }}"
+                                class="btn btn-warning btn-sm">
 
                                 Edit
 
                             </a>
 
-                            <form action="{{ route('courses.destroy',$course) }}"
-                                  method="POST"
-                                  class="d-inline">
+                            <form
+                                action="{{ route('courses.destroy',$course) }}"
+                                method="POST"
+                                class="d-inline">
 
                                 @csrf
                                 @method('DELETE')
@@ -117,6 +162,12 @@
                 </tbody>
 
             </table>
+
+        </div>
+
+        <div class="mt-3">
+
+            {{ $courses->links() }}
 
         </div>
 

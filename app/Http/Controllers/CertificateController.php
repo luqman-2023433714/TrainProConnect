@@ -11,14 +11,43 @@ class CertificateController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $certificates = Certificate::with([
-            'enrollment.participant',
-            'enrollment.trainingClass.course'
-        ])->get();
+        $search = $request->search;
 
-        return view('certificates.index', compact('certificates'));
+        $certificates = Certificate::with([
+                'enrollment.participant',
+                'enrollment.trainingClass.course'
+            ])
+            ->when($search, function ($query) use ($search) {
+
+                $query->where('certificate_no', 'like', "%{$search}%")
+                    ->orWhere('issue_date', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('remarks', 'like', "%{$search}%")
+
+                    ->orWhereHas('enrollment.participant', function ($q) use ($search) {
+
+                        $q->where('participant_name', 'like', "%{$search}%");
+
+                    })
+
+                    ->orWhereHas('enrollment.trainingClass.course', function ($q) use ($search) {
+
+                        $q->where('course_name', 'like', "%{$search}%")
+                          ->orWhere('course_code', 'like', "%{$search}%");
+
+                    });
+
+            })
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('certificates.index', compact(
+            'certificates',
+            'search'
+        ));
     }
 
     /**
@@ -46,7 +75,6 @@ class CertificateController extends Controller
             'remarks'       => 'nullable'
         ]);
 
-        // Generate Certificate Number
         $last = Certificate::latest()->first();
 
         if ($last) {

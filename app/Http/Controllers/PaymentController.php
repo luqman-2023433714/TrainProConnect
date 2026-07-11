@@ -11,14 +11,46 @@ class PaymentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $payments = Payment::with([
-            'enrollment.participant',
-            'enrollment.trainingClass.course'
-        ])->get();
+        $search = $request->search;
 
-        return view('payments.index', compact('payments'));
+        $payments = Payment::with([
+                'enrollment.participant',
+                'enrollment.trainingClass.course'
+            ])
+            ->when($search, function ($query) use ($search) {
+
+                $query->where('payment_no', 'like', "%{$search}%")
+                    ->orWhere('payment_method', 'like', "%{$search}%")
+                    ->orWhere('payment_status', 'like', "%{$search}%")
+                    ->orWhere('transaction_reference', 'like', "%{$search}%")
+                    ->orWhere('payment_date', 'like', "%{$search}%")
+                    ->orWhere('verified_by', 'like', "%{$search}%")
+                    ->orWhere('remarks', 'like', "%{$search}%")
+
+                    ->orWhereHas('enrollment.participant', function ($q) use ($search) {
+
+                        $q->where('participant_name', 'like', "%{$search}%");
+
+                    })
+
+                    ->orWhereHas('enrollment.trainingClass.course', function ($q) use ($search) {
+
+                        $q->where('course_name', 'like', "%{$search}%")
+                          ->orWhere('course_code', 'like', "%{$search}%");
+
+                    });
+
+            })
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('payments.index', compact(
+            'payments',
+            'search'
+        ));
     }
 
     /**
@@ -40,7 +72,6 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
             'enrollment_id'         => 'required',
             'amount'                => 'required|numeric',
             'payment_method'        => 'required',
@@ -48,26 +79,19 @@ class PaymentController extends Controller
             'transaction_reference' => 'nullable',
             'payment_date'          => 'nullable|date',
             'remarks'               => 'nullable'
-
         ]);
 
-        // Generate Payment Number
         $last = Payment::latest()->first();
 
         if ($last) {
-
             $number = intval(substr($last->payment_no, -6)) + 1;
-
         } else {
-
             $number = 1;
-
         }
 
         $paymentNo = 'PAY-' . date('Y') . '-' . str_pad($number, 6, '0', STR_PAD_LEFT);
 
         Payment::create([
-
             'payment_no'            => $paymentNo,
             'enrollment_id'         => $request->enrollment_id,
             'amount'                => $request->amount,
@@ -78,7 +102,6 @@ class PaymentController extends Controller
             'verified_by'           => null,
             'verified_at'           => null,
             'remarks'               => $request->remarks
-
         ]);
 
         return redirect()
@@ -116,7 +139,6 @@ class PaymentController extends Controller
     public function update(Request $request, Payment $payment)
     {
         $request->validate([
-
             'enrollment_id'         => 'required',
             'amount'                => 'required|numeric',
             'payment_method'        => 'required',
@@ -124,21 +146,20 @@ class PaymentController extends Controller
             'transaction_reference' => 'nullable',
             'payment_date'          => 'nullable|date',
             'remarks'               => 'nullable'
-
         ]);
 
-        $verifiedBy = null;
-        $verifiedAt = null;
+        $verifiedBy = $payment->verified_by;
+        $verifiedAt = $payment->verified_at;
 
-        if ($request->payment_status == 'Payment Verified') {
-
+        if (
+            $request->payment_status === 'Payment Verified' &&
+            $payment->payment_status !== 'Payment Verified'
+        ) {
             $verifiedBy = auth()->user()->name;
             $verifiedAt = now();
-
         }
 
         $payment->update([
-
             'enrollment_id'         => $request->enrollment_id,
             'amount'                => $request->amount,
             'payment_method'        => $request->payment_method,
@@ -148,7 +169,6 @@ class PaymentController extends Controller
             'verified_by'           => $verifiedBy,
             'verified_at'           => $verifiedAt,
             'remarks'               => $request->remarks
-
         ]);
 
         return redirect()

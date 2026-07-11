@@ -11,14 +11,48 @@ class AttendanceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $attendances = Attendance::with([
-            'enrollment.participant',
-            'enrollment.trainingClass.course'
-        ])->get();
+        $search = $request->search;
 
-        return view('attendances.index', compact('attendances'));
+        $attendances = Attendance::with([
+                'enrollment.participant',
+                'enrollment.trainingClass.course'
+            ])
+            ->when($search, function ($query) use ($search) {
+
+                $query->where('attendance_date', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('remarks', 'like', "%{$search}%")
+
+                    ->orWhereHas('enrollment.participant', function ($q) use ($search) {
+
+                        $q->where('participant_name', 'like', "%{$search}%");
+
+                    })
+
+                    ->orWhereHas('enrollment.trainingClass', function ($q) use ($search) {
+
+                        $q->where('class_code', 'like', "%{$search}%")
+
+                          ->orWhereHas('course', function ($course) use ($search) {
+
+                              $course->where('course_name', 'like', "%{$search}%")
+                                     ->orWhere('course_code', 'like', "%{$search}%");
+
+                          });
+
+                    });
+
+            })
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('attendances.index', compact(
+            'attendances',
+            'search'
+        ));
     }
 
     /**
@@ -41,10 +75,10 @@ class AttendanceController extends Controller
     {
         $request->validate([
 
-            'enrollment_id' => 'required|exists:enrollments,id',
+            'enrollment_id'   => 'required|exists:enrollments,id',
             'attendance_date' => 'required|date',
-            'status' => 'required',
-            'remarks' => 'nullable'
+            'status'          => 'required',
+            'remarks'         => 'nullable'
 
         ]);
 
@@ -86,10 +120,10 @@ class AttendanceController extends Controller
     {
         $request->validate([
 
-            'enrollment_id' => 'required|exists:enrollments,id',
+            'enrollment_id'   => 'required|exists:enrollments,id',
             'attendance_date' => 'required|date',
-            'status' => 'required',
-            'remarks' => 'nullable'
+            'status'          => 'required',
+            'remarks'         => 'nullable'
 
         ]);
 

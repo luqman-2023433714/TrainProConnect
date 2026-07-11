@@ -12,13 +12,33 @@ class TrainingClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $classes = TrainingClass::with(['course', 'trainer'])
-                    ->orderBy('id', 'desc')
-                    ->get();
+        $search = $request->search;
 
-        return view('classes.index', compact('classes'));
+        $classes = TrainingClass::with(['course', 'trainer'])
+            ->when($search, function ($query) use ($search) {
+
+                $query->where('class_code', 'like', "%{$search}%")
+                    ->orWhere('venue', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhereHas('course', function ($q) use ($search) {
+                        $q->where('course_name', 'like', "%{$search}%")
+                          ->orWhere('course_code', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('trainer', function ($q) use ($search) {
+                        $q->where('trainer_name', 'like', "%{$search}%");
+                    });
+
+            })
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('classes.index', compact(
+            'classes',
+            'search'
+        ));
     }
 
     /**
@@ -29,7 +49,10 @@ class TrainingClassController extends Controller
         $courses = Course::all();
         $trainers = Trainer::all();
 
-        return view('classes.create', compact('courses', 'trainers'));
+        return view('classes.create', compact(
+            'courses',
+            'trainers'
+        ));
     }
 
     /**

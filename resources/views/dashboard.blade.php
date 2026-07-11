@@ -17,7 +17,7 @@
                     <div class="card bg-primary text-white shadow h-100">
                         <div class="card-body text-center">
                             <h5>Courses</h5>
-                            <h1>{{ \App\Models\Course::count() }}</h1>
+                            <h1>{{ $courseCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -29,7 +29,7 @@
                     <div class="card bg-success text-white shadow h-100">
                         <div class="card-body text-center">
                             <h5>Trainers</h5>
-                            <h1>{{ \App\Models\Trainer::count() }}</h1>
+                            <h1>{{ $trainerCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -41,7 +41,7 @@
                     <div class="card bg-warning text-white shadow h-100">
                         <div class="card-body text-center">
                             <h5>Participants</h5>
-                            <h1>{{ \App\Models\Participant::count() }}</h1>
+                            <h1>{{ $participantCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -53,7 +53,7 @@
                     <div class="card bg-danger text-white shadow h-100">
                         <div class="card-body text-center">
                             <h5>Classes</h5>
-                            <h1>{{ \App\Models\TrainingClass::count() }}</h1>
+                            <h1>{{ $classCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -70,7 +70,7 @@
                     <div class="card bg-info text-white shadow h-100">
                         <div class="card-body text-center">
                             <h5>Enrollments</h5>
-                            <h1>{{ \App\Models\Enrollment::count() }}</h1>
+                            <h1>{{ $enrollmentCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -82,7 +82,7 @@
                     <div class="card bg-secondary text-white shadow h-100">
                         <div class="card-body text-center">
                             <h5>Attendance</h5>
-                            <h1>{{ \App\Models\Attendance::count() }}</h1>
+                            <h1>{{ $attendanceCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -94,7 +94,7 @@
                     <div class="card bg-dark text-white shadow h-100">
                         <div class="card-body text-center">
                             <h5>Certificates</h5>
-                            <h1>{{ \App\Models\Certificate::count() }}</h1>
+                            <h1>{{ $certificateCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -106,7 +106,7 @@
                     <div class="card text-white shadow h-100" style="background:#6f42c1;">
                         <div class="card-body text-center">
                             <h5>Payments</h5>
-                            <h1>{{ \App\Models\Payment::count() }}</h1>
+                            <h1>{{ $paymentCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -122,7 +122,7 @@
                     <div class="card text-white shadow h-100" style="background:#fd7e14;">
                         <div class="card-body text-center">
                             <h5>Notifications</h5>
-                            <h1>{{ \App\Models\Notification::count() }}</h1>
+                            <h1>{{ $notificationCount }}</h1>
                         </div>
                     </div>
                 </a>
@@ -135,9 +135,7 @@
         <div class="card mt-5 shadow">
 
             <div class="card-header fw-bold">
-
                 Quick Summary
-
             </div>
 
             <div class="card-body">
@@ -146,47 +144,47 @@
 
                     <tr>
                         <th>Total Courses</th>
-                        <td>{{ \App\Models\Course::count() }}</td>
+                        <td>{{ $courseCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Trainers</th>
-                        <td>{{ \App\Models\Trainer::count() }}</td>
+                        <td>{{ $trainerCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Participants</th>
-                        <td>{{ \App\Models\Participant::count() }}</td>
+                        <td>{{ $participantCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Classes</th>
-                        <td>{{ \App\Models\TrainingClass::count() }}</td>
+                        <td>{{ $classCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Enrollments</th>
-                        <td>{{ \App\Models\Enrollment::count() }}</td>
+                        <td>{{ $enrollmentCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Attendance</th>
-                        <td>{{ \App\Models\Attendance::count() }}</td>
+                        <td>{{ $attendanceCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Certificates</th>
-                        <td>{{ \App\Models\Certificate::count() }}</td>
+                        <td>{{ $certificateCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Payments</th>
-                        <td>{{ \App\Models\Payment::count() }}</td>
+                        <td>{{ $paymentCount }}</td>
                     </tr>
 
                     <tr>
                         <th>Total Notifications</th>
-                        <td>{{ \App\Models\Notification::count() }}</td>
+                        <td>{{ $notificationCount }}</td>
                     </tr>
 
                 </table>

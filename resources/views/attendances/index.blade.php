@@ -9,14 +9,24 @@
     <div class="container py-4">
 
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show">
+
                 {{ session('success') }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+                </button>
+
             </div>
         @endif
 
         <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <h4>Attendance List</h4>
+            <h4 class="mb-0">
+                Attendance List
+            </h4>
 
             <a href="{{ route('attendances.create') }}"
                class="btn btn-primary">
@@ -27,95 +37,154 @@
 
         </div>
 
-        <table class="table table-bordered table-hover">
+        <div class="card mb-3">
 
-            <thead class="table-dark">
+            <div class="card-body">
 
-            <tr>
+                <form method="GET"
+                      action="{{ route('attendances.index') }}">
 
-                <th>ID</th>
-                <th>Participant</th>
-                <th>Class</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th width="180">Action</th>
+                    <div class="row">
 
-            </tr>
+                        <div class="col-md-10">
 
-            </thead>
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ $search }}"
+                                class="form-control"
+                                placeholder="Search participant, class, course, attendance date, status or remarks">
 
-            <tbody>
+                        </div>
 
-            @forelse($attendances as $attendance)
-
-                <tr>
-
-                    <td>{{ $attendance->id }}</td>
-
-                    <td>
-                        {{ $attendance->enrollment->participant->participant_name }}
-                    </td>
-
-                    <td>
-                        {{ $attendance->enrollment->trainingClass->class_code }}
-                    </td>
-
-                    <td>
-                        {{ $attendance->attendance_date }}
-                    </td>
-
-                    <td>
-                        {{ $attendance->status }}
-                    </td>
-
-                    <td>
-
-                        <a href="{{ route('attendances.edit',$attendance) }}"
-                           class="btn btn-warning btn-sm">
-
-                            Edit
-
-                        </a>
-
-                        <form
-                            action="{{ route('attendances.destroy',$attendance) }}"
-                            method="POST"
-                            style="display:inline">
-
-                            @csrf
-                            @method('DELETE')
+                        <div class="col-md-2 d-grid">
 
                             <button
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Delete this attendance?')">
+                                class="btn btn-dark">
 
-                                Delete
+                                Search
 
                             </button>
 
-                        </form>
+                        </div>
 
-                    </td>
+                    </div>
 
-                </tr>
+                </form>
 
-            @empty
+            </div>
 
-                <tr>
+        </div>
 
-                    <td colspan="6" class="text-center">
+        <div class="table-responsive">
 
-                        No attendance record found.
+            <table class="table table-bordered table-hover align-middle">
 
-                    </td>
+                <thead class="table-dark">
 
-                </tr>
+                    <tr>
 
-            @endforelse
+                        <th width="60">ID</th>
+                        <th>Participant</th>
+                        <th>Class</th>
+                        <th>Course</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                        <th width="180" class="text-center">Action</th>
 
-            </tbody>
+                    </tr>
 
-        </table>
+                </thead>
+
+                <tbody>
+
+                @forelse($attendances as $attendance)
+
+                    <tr>
+
+                        <td>{{ $attendance->id }}</td>
+
+                        <td>
+                            {{ $attendance->enrollment->participant->participant_name }}
+                        </td>
+
+                        <td>
+                            {{ $attendance->enrollment->trainingClass->class_code }}
+                        </td>
+
+                        <td>
+                            {{ $attendance->enrollment->trainingClass->course->course_name }}
+                        </td>
+
+                        <td>
+                            {{ $attendance->attendance_date }}
+                        </td>
+
+                        <td>
+                            {{ $attendance->status }}
+                        </td>
+
+                        <td>
+                            {{ $attendance->remarks }}
+                        </td>
+
+                        <td class="text-center">
+
+                            <a href="{{ route('attendances.edit', $attendance) }}"
+                               class="btn btn-warning btn-sm">
+
+                                Edit
+
+                            </a>
+
+                            <form
+                                action="{{ route('attendances.destroy', $attendance) }}"
+                                method="POST"
+                                class="d-inline">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Delete this attendance?')">
+
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="8" class="text-center">
+
+                            No attendance record found.
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="mt-3">
+
+            {{ $attendances->links() }}
+
+        </div>
 
     </div>
 

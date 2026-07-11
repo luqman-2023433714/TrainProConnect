@@ -12,15 +12,47 @@ class EnrollmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $enrollments = Enrollment::with([
-            'participant',
-            'trainingClass.course',
-            'trainingClass.trainer'
-        ])->get();
+        $search = $request->search;
 
-        return view('enrollments.index', compact('enrollments'));
+        $enrollments = Enrollment::with([
+                'participant',
+                'trainingClass.course',
+                'trainingClass.trainer'
+            ])
+            ->when($search, function ($query) use ($search) {
+
+                $query->where('attendance_status', 'like', "%{$search}%")
+                    ->orWhere('completion_status', 'like', "%{$search}%")
+                    ->orWhere('enrollment_date', 'like', "%{$search}%")
+
+                    ->orWhereHas('participant', function ($q) use ($search) {
+                        $q->where('participant_name', 'like', "%{$search}%");
+                    })
+
+                    ->orWhereHas('trainingClass', function ($q) use ($search) {
+
+                        $q->where('class_code', 'like', "%{$search}%")
+
+                          ->orWhereHas('course', function ($course) use ($search) {
+
+                              $course->where('course_name', 'like', "%{$search}%")
+                                     ->orWhere('course_code', 'like', "%{$search}%");
+
+                          });
+
+                    });
+
+            })
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('enrollments.index', compact(
+            'enrollments',
+            'search'
+        ));
     }
 
     /**
@@ -29,6 +61,7 @@ class EnrollmentController extends Controller
     public function create()
     {
         $participants = Participant::all();
+
         $classes = TrainingClass::with('course')->get();
 
         return view('enrollments.create', compact(
@@ -74,6 +107,7 @@ class EnrollmentController extends Controller
     public function edit(Enrollment $enrollment)
     {
         $participants = Participant::all();
+
         $classes = TrainingClass::with('course')->get();
 
         return view('enrollments.edit', compact(

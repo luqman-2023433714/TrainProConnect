@@ -7,18 +7,44 @@ use Illuminate\Http\Request;
 
 class ParticipantController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of participants.
+     */
+    public function index(Request $request)
     {
-        $participants = Participant::all();
+        $search = $request->search;
 
-        return view('participants.index', compact('participants'));
+        $participants = Participant::when($search, function ($query) use ($search) {
+
+                $query->where('participant_name', 'like', "%{$search}%")
+                      ->orWhere('ic_passport', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%")
+                      ->orWhere('phone', 'like', "%{$search}%")
+                      ->orWhere('company', 'like', "%{$search}%")
+                      ->orWhere('status', 'like', "%{$search}%");
+
+            })
+            ->orderBy('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('participants.index', compact(
+            'participants',
+            'search'
+        ));
     }
 
+    /**
+     * Show create form.
+     */
     public function create()
     {
         return view('participants.create');
     }
 
+    /**
+     * Store participant.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -39,16 +65,25 @@ class ParticipantController extends Controller
             ->with('success', 'Participant added successfully.');
     }
 
+    /**
+     * Display participant.
+     */
     public function show(Participant $participant)
     {
         //
     }
 
+    /**
+     * Show edit form.
+     */
     public function edit(Participant $participant)
     {
         return view('participants.edit', compact('participant'));
     }
 
+    /**
+     * Update participant.
+     */
     public function update(Request $request, Participant $participant)
     {
         $request->validate([
@@ -69,6 +104,9 @@ class ParticipantController extends Controller
             ->with('success', 'Participant updated successfully.');
     }
 
+    /**
+     * Delete participant.
+     */
     public function destroy(Participant $participant)
     {
         $participant->delete();
