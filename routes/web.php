@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\TrainerController;
+use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\TrainingClassController;
+use App\Http\Controllers\EnrollmentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,8 +18,16 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Course Module
+    // Modules
     Route::resource('courses', CourseController::class);
+
+    Route::resource('trainers', TrainerController::class);
+
+    Route::resource('participants', ParticipantController::class);
+
+    Route::resource('classes', TrainingClassController::class);
+
+    Route::resource('enrollments', EnrollmentController::class);
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

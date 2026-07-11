@@ -4,20 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Course extends Model
+class Trainer extends Model
 {
     protected $fillable = [
 
-        'course_code',
-        'course_name',
-        'duration',
-        'fee',
-        'description'
+        'trainer_name',
+        'email',
+        'phone',
+        'specialization',
+        'status'
 
     ];
 
     /**
-     * One Course
+     * One Trainer
      * has many Training Classes
      */
 
