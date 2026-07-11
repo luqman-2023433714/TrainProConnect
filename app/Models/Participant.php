@@ -21,4 +21,10 @@ class Participant extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function notifications()
+{
+    return $this->hasMany(Notification::class);
+}
+
 }

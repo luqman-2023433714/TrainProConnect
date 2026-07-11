@@ -12,24 +12,28 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create([
-            'role_name' => 'Owner',
-            'description' => 'Full system control',
+        Role::firstOrCreate([
+            'role_name' => 'Admin'
+        ],[
+            'description' => 'System Administrator'
         ]);
 
-        Role::create([
-            'role_name' => 'Admin',
-            'description' => 'Manage training system',
+        Role::firstOrCreate([
+            'role_name' => 'Finance'
+        ],[
+            'description' => 'Finance Officer'
         ]);
 
-        Role::create([
-            'role_name' => 'Trainer',
-            'description' => 'Conduct training',
+        Role::firstOrCreate([
+            'role_name' => 'Trainer'
+        ],[
+            'description' => 'Trainer'
         ]);
 
-        Role::create([
-            'role_name' => 'Participant',
-            'description' => 'Attend training',
+        Role::firstOrCreate([
+            'role_name' => 'Student'
+        ],[
+            'description' => 'Participant'
         ]);
     }
 }

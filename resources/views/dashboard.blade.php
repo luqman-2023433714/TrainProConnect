@@ -11,6 +11,7 @@
         <!-- Master Data -->
         <div class="row g-4">
 
+            <!-- Courses -->
             <div class="col-md-3">
                 <a href="{{ route('courses.index') }}" class="text-decoration-none">
                     <div class="card bg-primary text-white shadow h-100">
@@ -22,6 +23,7 @@
                 </a>
             </div>
 
+            <!-- Trainers -->
             <div class="col-md-3">
                 <a href="{{ route('trainers.index') }}" class="text-decoration-none">
                     <div class="card bg-success text-white shadow h-100">
@@ -33,6 +35,7 @@
                 </a>
             </div>
 
+            <!-- Participants -->
             <div class="col-md-3">
                 <a href="{{ route('participants.index') }}" class="text-decoration-none">
                     <div class="card bg-warning text-white shadow h-100">
@@ -44,6 +47,7 @@
                 </a>
             </div>
 
+            <!-- Training Classes -->
             <div class="col-md-3">
                 <a href="{{ route('classes.index') }}" class="text-decoration-none">
                     <div class="card bg-danger text-white shadow h-100">
@@ -60,6 +64,7 @@
         <!-- Operations -->
         <div class="row g-4 mt-2">
 
+            <!-- Enrollments -->
             <div class="col-md-3">
                 <a href="{{ route('enrollments.index') }}" class="text-decoration-none">
                     <div class="card bg-info text-white shadow h-100">
@@ -71,6 +76,7 @@
                 </a>
             </div>
 
+            <!-- Attendance -->
             <div class="col-md-3">
                 <a href="{{ route('attendances.index') }}" class="text-decoration-none">
                     <div class="card bg-secondary text-white shadow h-100">
@@ -82,6 +88,7 @@
                 </a>
             </div>
 
+            <!-- Certificates -->
             <div class="col-md-3">
                 <a href="{{ route('certificates.index') }}" class="text-decoration-none">
                     <div class="card bg-dark text-white shadow h-100">
@@ -93,13 +100,29 @@
                 </a>
             </div>
 
+            <!-- Payments -->
             <div class="col-md-3">
                 <a href="{{ route('payments.index') }}" class="text-decoration-none">
-                    <div class="card text-white shadow h-100"
-                         style="background:#6f42c1;">
+                    <div class="card text-white shadow h-100" style="background:#6f42c1;">
                         <div class="card-body text-center">
                             <h5>Payments</h5>
                             <h1>{{ \App\Models\Payment::count() }}</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Notifications -->
+        <div class="row g-4 mt-2">
+
+            <div class="col-md-3">
+                <a href="{{ route('notifications.index') }}" class="text-decoration-none">
+                    <div class="card text-white shadow h-100" style="background:#fd7e14;">
+                        <div class="card-body text-center">
+                            <h5>Notifications</h5>
+                            <h1>{{ \App\Models\Notification::count() }}</h1>
                         </div>
                     </div>
                 </a>
@@ -159,6 +182,11 @@
                     <tr>
                         <th>Total Payments</th>
                         <td>{{ \App\Models\Payment::count() }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Total Notifications</th>
+                        <td>{{ \App\Models\Notification::count() }}</td>
                     </tr>
 
                 </table>
