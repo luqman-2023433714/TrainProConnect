@@ -8,6 +8,7 @@
 
     <div class="container py-4">
 
+        <!-- Row 1 -->
         <div class="row g-4">
 
             <div class="col-md-3">
@@ -56,6 +57,8 @@
 
         </div>
 
+        <!-- Row 2 -->
+
         <div class="row g-4 mt-2">
 
             <div class="col-md-3">
@@ -70,7 +73,18 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card bg-secondary text-white shadow h-100">
+                <a href="{{ route('attendances.index') }}" class="text-decoration-none">
+                    <div class="card bg-secondary text-white shadow h-100">
+                        <div class="card-body text-center">
+                            <h5>Attendance</h5>
+                            <h1>{{ \App\Models\Attendance::count() }}</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-dark text-white shadow h-100">
                     <div class="card-body text-center">
                         <h5>Certificates</h5>
                         <h1>0</h1>
@@ -80,7 +94,7 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card bg-dark text-white shadow h-100">
+                <div class="card bg-secondary text-white shadow h-100">
                     <div class="card-body text-center">
                         <h5>Payments</h5>
                         <h1>0</h1>
@@ -89,17 +103,9 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card bg-secondary text-white shadow h-100">
-                    <div class="card-body text-center">
-                        <h5>Reports</h5>
-                        <h1>--</h1>
-                        <small>Coming Soon</small>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <!-- Summary -->
 
         <div class="card mt-5 shadow">
 
@@ -136,6 +142,11 @@
                     <tr>
                         <th>Total Enrollments</th>
                         <td>{{ \App\Models\Enrollment::count() }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Total Attendance</th>
+                        <td>{{ \App\Models\Attendance::count() }}</td>
                     </tr>
 
                 </table>
