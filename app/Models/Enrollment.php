@@ -31,4 +31,10 @@ class Enrollment extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function certificate()
+    {
+    return $this->hasOne(Certificate::class);
+    }
+    
 }

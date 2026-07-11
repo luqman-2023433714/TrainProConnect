@@ -8,7 +8,7 @@
 
     <div class="container py-4">
 
-        <!-- Row 1 -->
+        <!-- Master Data -->
         <div class="row g-4">
 
             <div class="col-md-3">
@@ -57,8 +57,7 @@
 
         </div>
 
-        <!-- Row 2 -->
-
+        <!-- Operations -->
         <div class="row g-4 mt-2">
 
             <div class="col-md-3">
@@ -84,21 +83,22 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card bg-dark text-white shadow h-100">
-                    <div class="card-body text-center">
-                        <h5>Certificates</h5>
-                        <h1>0</h1>
-                        <small>Coming Soon</small>
+                <a href="{{ route('certificates.index') }}" class="text-decoration-none">
+                    <div class="card bg-dark text-white shadow h-100">
+                        <div class="card-body text-center">
+                            <h5>Certificates</h5>
+                            <h1>{{ \App\Models\Certificate::count() }}</h1>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <div class="col-md-3">
-                <div class="card bg-secondary text-white shadow h-100">
+                <div class="card bg-light shadow h-100">
                     <div class="card-body text-center">
                         <h5>Payments</h5>
                         <h1>0</h1>
-                        <small>Coming Soon</small>
+                        <small>Next Module</small>
                     </div>
                 </div>
             </div>
@@ -147,6 +147,11 @@
                     <tr>
                         <th>Total Attendance</th>
                         <td>{{ \App\Models\Attendance::count() }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Total Certificates</th>
+                        <td>{{ \App\Models\Certificate::count() }}</td>
                     </tr>
 
                 </table>
