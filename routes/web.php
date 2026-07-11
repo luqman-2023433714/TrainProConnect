@@ -9,6 +9,7 @@ use App\Http\Controllers\TrainingClassController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +35,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('attendances', AttendanceController::class);
 
     Route::resource('certificates', CertificateController::class);
+
+    Route::resource('payments', PaymentController::class);
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

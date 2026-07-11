@@ -94,18 +94,20 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card bg-light shadow h-100">
-                    <div class="card-body text-center">
-                        <h5>Payments</h5>
-                        <h1>0</h1>
-                        <small>Next Module</small>
+                <a href="{{ route('payments.index') }}" class="text-decoration-none">
+                    <div class="card text-white shadow h-100"
+                         style="background:#6f42c1;">
+                        <div class="card-body text-center">
+                            <h5>Payments</h5>
+                            <h1>{{ \App\Models\Payment::count() }}</h1>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
 
         </div>
 
-        <!-- Summary -->
+        <!-- Quick Summary -->
 
         <div class="card mt-5 shadow">
 
@@ -152,6 +154,11 @@
                     <tr>
                         <th>Total Certificates</th>
                         <td>{{ \App\Models\Certificate::count() }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Total Payments</th>
+                        <td>{{ \App\Models\Payment::count() }}</td>
                     </tr>
 
                 </table>
